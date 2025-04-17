@@ -24,7 +24,14 @@ void echo(dynamic $x, [String? $title]) {
 
 void dump(dynamic $x, [String? $title]) {
   final $lines = _textToLines(StackTrace.current.toString());
-  final $lineInfo = '@${$lines[1].replaceAll('#1      ', '')}';
+  String $line = '';
+  for (int i=0; i<$lines.length; i++) {
+    if ($lines[i].contains('(package:output/output.dart:')) {
+      $line = $lines[i + 1];
+      break;
+    }
+  }
+  final $lineInfo = '@${$line.substring(8)}';
   String $mode = _isInDebugMode ? 'DEBUG' : 'RELEASE';
   String $json = ($x is String) ? '`${$x}`' : '${$x}';
   if ($title == null) {
