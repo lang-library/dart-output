@@ -26,12 +26,16 @@ void dump(dynamic $x, [String? $title]) {
   final $lines = _textToLines(StackTrace.current.toString());
   String $line = '';
   for (int i=0; i<$lines.length; i++) {
-    if ($lines[i].contains('(package:output/output.dart:')) {
+    if ($lines[i].contains('output/output.dart')) {
       $line = $lines[i + 1];
       break;
     }
   }
-  final $lineInfo = '@${$line.substring(8)}';
+  if ($line.startsWith('#')) {
+    final $reg = RegExp(r'#[0-9]+[ ]+');
+    $line = $line.replaceFirst($reg, '');
+  }
+  final $lineInfo = '@ ${$line}';
   String $mode = _isInDebugMode ? 'DEBUG' : 'RELEASE';
   String $json = ($x is String) ? '`${$x}`' : '${$x}';
   if ($title == null) {
